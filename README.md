@@ -50,27 +50,23 @@ The genre of a song can be hard to classify and is an important part of song rec
 
 ## 4. Potential Results and Discussion
 
-We will use the following metrics to evaluate our models:
+### Evaluation Metrics
 
-- RMSE and MAE (popularity prediction): the average error in popularity point. RMSE penalizes large errors more heavily, while MAE is easier to interpret.
-
-- R² (popularity prediction): the share of variation in popularity the model explains, compared with simply predicting the average.
-
-- Silhouette score (clustering): how well separated the clusters are.
-
-- Adjusted Rand Index and Normalized Mutual Information (clustering): how closely the clusters match the actual genre labels, from 0 (chance) to 1 (perfect match) [4]
+- Accuracy (classification): the share of songs assigned the correct genre.
+- Macro-F1 (classification): averages the F1 score across genres so each genre counts equally.
+- Confusion matrix (classification): shows which genres are most often confused with each other.
+- Silhouette score (clustering): how well separated the k-means clusters are.
+- Adjusted Rand Index and Normalized Mutual Information (clustering): how closely the clusters match the actual genre labels, from 0 (chance) to 1 (perfect match) [5].
 
 ### Project Goals
 
-- Outperform a linear regression baseline using ensemble models.
-
-- Identify which audio features most influence a song’s popularity.
-
+- Outperform the logistic regression baseline using XGBoost.
+- Identify which audio features best distinguish genres.
 - Determine whether songs naturally cluster into groups that resemble genres.
 
 ### Ethical Considerations
 
-A model trained on past hits could encourage recommending songs that sound like what is already popular, which disadvantages new and niche artists. Genre labels also reflect Spotify’s categories and may not fairly represent non-Western music.
+Genre labels reflect Spotify’s categories and may not fairly represent non-Western music. Automated labels could also box artists into categories that affect how their music is recommended.
 
 ### Sustainability Considerations
 
@@ -82,10 +78,9 @@ Spotify has restricted access to audio features in its API, so we will rely on t
 
 ### Expected Results
 
-We expect tree-based models to outperform linear regression because popularity likely depends on nonlinear combinations of features. However, audio features alone will likely explain only a modest share of popularity, since only prior work found that an artist’s existing fame strongly influences success [5]. For clustering, we expect only partial alignment with genres. Distinct genres like classical or metal should form clear clusters, while similar subgenres overlap, suggesting genre is partly cultural rather than purely acoustic. [6]
+We expect XGBoost to outperform logistic regression because genre likely depends on nonlinear combinations of audio features. This is supported by prior work, where tree-based models such as random forest achieved the highest accuracy (79.40%) for Spotify genre classification [1]. Accuracy should be much higher on grouped genre families than across all 114 original genres, since similar subgenres are hard to tell apart. For clustering, we expect only partial alignment with genres. Distinct genres like classical or metal should form clear clusters, while similar subgenres overlap, which is consistent with prior findings that genre labels are often noisy and inconsistent [4].
 
 ---
-
 
 ## 5. Gantt Chart
 
@@ -110,18 +105,15 @@ We expect tree-based models to outperform linear regression because popularity l
 | Rida Rehan | Video Generation and Slides |
 
 
-## 6. References
+## 7. References
 
-[1] M. Fiqri, F. B. S. Lizen, and M. Ikrom, "Implementation of supervised learning algorithm on Spotify music genre classification," *Indones. J. Appl. Technol. Innov. Sci.*, vol. 2, no. 1, pp. 7–12, Feb. 2025, doi: 10.57152/ijatis.v2i1.1102.
+[1] M. Fiqri, F. B. S. Lizen, and M. Ikrom, “Implementation of supervised learning algorithm on Spotify music genre classification,” *Indones. J. Appl. Technol. Innov. Sci.*, vol. 2, no. 1, pp. 7–12, Feb. 2025, doi: 10.57152/ijatis.v2i1.1102.
 
-[2] A. Jerzak, "An accidental benchmark: The history, contingent power, and lasting traces of the GTZAN dataset," *Digit. Soc.*, vol. 4, no. 2, Art. no. 34, May 2025, doi: 10.1007/s44206-025-00191-w.
+[2] A. Jerzak, “An accidental benchmark: The history, contingent power, and lasting traces of the GTZAN dataset,” *Digit. Soc.*, vol. 4, no. 2, Art. no. 34, May 2025, doi: 10.1007/s44206-025-00191-w.
 
-[3] H. Bahuleyan, "Music genre classification using machine learning techniques," *arXiv:1804.01149*, Apr. 2018.
+[3] H. Bahuleyan, “Music genre classification using machine learning techniques,” Apr. 2018, *arXiv:1804.01149*.
 
-[4] L. Hubert and P. Arabie, "Comparing partitions," *J. Classification*, vol. 2, no. 1, pp. 193–218, 1985.
+[4] B. L. Sturm, “The GTZAN dataset: Its contents, its faults, their effects on evaluation, and the future use,” *J. New Music Res.*, vol. 43, no. 2, pp. 147–172, 2014.
 
-[5] M. Interiano, K. Kazemi, L. Wang, J. Yang, Z. Yu, and N. L. Komarova, "Musical trends and predictability of success in contemporary songs in and out of the top charts," *R. Soc. Open Sci.*, vol. 5, no. 5, Art. no. 171274, 2018.
-
-[6] B. L. Sturm, "The GTZAN dataset: Its contents, its faults, their effects on evaluation, and the future use," *J. New Music Res.*, vol. 43, no. 2, pp. 147–172, 2014.
-
+[5] L. Hubert and P. Arabie, “Comparing partitions,” *J. Classification*, vol. 2, no. 1, pp. 193–218, 1985.
 
