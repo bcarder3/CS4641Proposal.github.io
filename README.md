@@ -1,11 +1,11 @@
-test #1
+
 
 # Project Proposal
 
 ## 1. Introduction and Background
 
 ### Introduction
-fff
+
 ### Literature Review
 Discuss related research or previous work relevant to the project.
 
