@@ -84,14 +84,7 @@ We expect XGBoost to outperform logistic regression because genre likely depends
 
 ## 5. Gantt Chart
 
-| Task | Member(s) Responsible | Timeline |
-|---|---|---|
-| Task 1 |  |  |
-| Task 2 |  |  |
-| Task 3 |  |  |
-| Task 4 |  |  |
-| Task 5 |  |  |
-
+[Download the Gantt Chart](GanttChart-1.xlsx)
 ---
 
 ## 6. Contribution Table
