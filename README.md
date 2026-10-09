@@ -5,8 +5,7 @@ test #1
 ## 1. Introduction and Background
 
 ### Introduction
-Briefly introduce the topic of the project and provide background information.
-
+fff
 ### Literature Review
 Discuss related research or previous work relevant to the project.
 
