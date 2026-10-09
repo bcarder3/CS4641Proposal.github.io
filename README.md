@@ -93,11 +93,11 @@ Discuss what results you expect to observe and why.
 
 | Name | Proposal Contributions |
 |---|---|
-| Tucker Albaugh |  |
-| Andrew Wu |  |
-| Benjamin Carder |  |
-| Meeton Kirkuki |  |
-| Rida Rehan |  |
+| Tucker Albaugh | Idea Proposition + Data Sourcing |
+| Andrew Wu | Introduction and Background + Gantt Chart |
+| Benjamin Carder | Problem Definition + Methods |
+| Meeton Kirkuki | Potential Results and Discussion |
+| Rida Rehan | Video Generation and Slides |
 
 ---
 
