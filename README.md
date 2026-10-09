@@ -92,10 +92,11 @@ Discuss what results you expect to observe and why.
 
 | Name | Proposal Contributions |
 |---|---|
-| Member 1 |  |
-| Member 2 |  |
-| Member 3 |  |
-| Member 4 |  |
+| Tucker Albaugh |  |
+| Andrew Wu |  |
+| Benjamin Carder |  |
+| Meeton Kirkuki |  |
+| Rida Rehan |  |
 
 ---
 
