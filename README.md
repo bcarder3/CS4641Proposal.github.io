@@ -7,7 +7,7 @@
 ### Introduction
 
 ### Literature Review
-Discuss related research or previous work relevant to the project.
+The main goal of this project is to predict how popular a song would be, a scale of 0 to 100 based off of certain features like loudness, tempo, danceability and energy. The popularity score is made by looking at how many plays and how recent their plays were. We can also test which features have the most impact of a songs popularity score.
 
 ### Dataset Description
 Describe the dataset that will be used.
