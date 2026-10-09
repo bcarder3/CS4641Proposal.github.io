@@ -2,60 +2,29 @@
 
 ## 1. Introduction and Background
 
-The main goal of this project is to predict a song’s genre from features like loudness, tempo, danceability, and energy using both supervised and unsupervised learning.
+**The main goal of this project is to predict a song’s genre from features like loudness, tempo, danceability and energy, using both supervised and unsupervised learning.**
 
 ### Literature Review
 
-- The first article examines which supervised learning model classifies a song's genre most accurately. Random Forest achieved the highest accuracy at **79.40%**, followed closely by Decision Tree at **79.30%**, Bayes at **77.28%**, and K-Nearest Neighbors at **60.74%**. The study concluded that Random Forest was the strongest model for genre classification on Spotify data [1].
+- The first article looks through which supervised learning model classifies a songs genre the most accurately. From the article, Random forest wins at 79.40% accuracy, with decision tree almost tied at 79.30%, Bayes was 77.28%, and k-nearest neighbors was 60.74%. They conclude random forest is the best choice for genre classification on Spotify.
 
-- The second article discusses research on automatically classifying musical genres from audio signals and how the GTZAN genre dataset became a major benchmark for music genre classification. It also explains how the dataset's feature-based view of music and genre influenced later music technology research [2].
+- The second article “presented a paper on how researchers could automatically classify musical genres from audio signals. Claiming that his model worked as well as human classifiers” [2] This article shows how the GTZAN genre dataset became a benchmark for genre data, and argues that its feature-based view of music and genre shaped today’s music technology.
 
-- Another study compared a deep learning CNN approach, trained end-to-end, with traditional machine learning methods that relied on hand-crafted time- and frequency-domain audio features [3].
+- Another study compared deep learning CNN approach, trained end-to-end, with traditional ML methods that relied on ‘hand-crafted’ time and frequency domain audio features [3].
 
 ### Dataset Description
 
-The dataset we will be using is the **Spotify Tracks Dataset** from Kaggle. It contains data from Spotify's API and includes information for approximately **114,000 songs**.
+The dataset we will be using is the Spotify track dataset from Kaggle. It contains data from Spotify’s API and includes information for ~114,000 songs. For each song, there is qualitative information such as artist, album, song name, genre, and some quantitative characteristics describing the songs audio features. These characteristics include energy, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, duration, musical key, danceability, mode, and a popularity score. For this project we will be focusing on predicting the genre variable.
 
-For each song, the dataset contains qualitative information such as:
-
-- Artist
-- Album
-- Song name
-- Genre
-
-It also contains quantitative audio characteristics such as:
-
-- Energy
-- Loudness
-- Speechiness
-- Acousticness
-- Instrumentalness
-- Liveness
-- Valence
-- Tempo
-- Duration
-- Musical key
-- Danceability
-- Mode
-- Popularity score
-
-For this project, we will focus on predicting the **genre** variable.
-
-**Dataset Link:** [Spotify Tracks Dataset](https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset)
+Dataset Link: [Link](https://www.kaggle.com/datasets/maharshipandya/-spotify-tracks-dataset)
 
 ---
 
 ## 2. Problem Definition
 
-### Problem and Motivation
+### Problem
 
-- The genre of a song can be difficult to classify and is an important component of music recommendation systems on streaming platforms.
-
-- Automating genre classification can help organize large music libraries and potentially improve recommendation systems.
-
-- Machine learning provides a way to identify patterns across audio features and determine how those characteristics relate to the genre of a song.
-
-- This analysis can also provide insight into how different genres differ musically based on measurable audio characteristics.
+The genre of a song can be hard to classify and is an important part of song recommendations on streaming services. Being able to automate genre classification can help organize large libraries and improve insights. Machine learning provides a way to identify patterns from the audio features, and how that impacts the genre a song will fall into. This can also give insight into how genres differ musically.
 
 ---
 
@@ -63,75 +32,60 @@ For this project, we will focus on predicting the **genre** variable.
 
 ### Data Preprocessing
 
-- **Remove duplicate tracks:** If a `track_id` occurs multiple times with different genre labels, we will keep only one instance.
+- Remove duplicate tracks: If a `track_ID` occurs multiple times with different genre labels, we will only keep 1 instance.
 
-- **Group similar genres:** There are 114 unique genres in the dataset. We will group similar genres into broader genre categories to make classification more manageable and interpretable.
+- Group together genres: There are 114 unique genres in the dataset. We will group similar genres into one overarching genre.
 
-- **Standardize features:** We will use `sklearn.preprocessing.StandardScaler` because many of the audio features are measured on different scales. Standardization will place the numerical features on comparable scales before they are used in the machine learning models.
+- Standardize features (using `sklearn.preprocessing.StandardScaler`): Lots of the features are on different scales. We will want to normalize all features so they can be used for the ML models.
 
-### Potential Machine Learning Models
+### Potential ML Models
 
-#### Logistic Regression — Supervised
+- Logistic Regression (supervised): We can use logistic regression to develop a baseline model to predict a song's genre from the features. It will provide a simple starting point for classification and can be used to compare with more complex models. We will use the scikit-learn library and the `sklearn.linear_model.LogisticRegression` class.
 
-- Logistic Regression will be used as a baseline model to predict a song's genre from its audio features.
-- It will provide a simple starting point for classification and allow us to compare its performance with more complex models.
-- We will use the `sklearn.linear_model.LogisticRegression` class from scikit-learn.
+- K-Means Clustering (unsupervised): We can use k-means clustering to group songs based on similarities in their audio features. We will use the scikit-learn library and the `sklearn.cluster.KMeans` class.
 
-#### K-Means Clustering — Unsupervised
-
-- K-Means will be used to group songs based on similarities in their audio features without using the genre labels during training.
-- We can then compare the resulting clusters with the actual genre labels to determine whether songs naturally form groups that resemble genres.
-- We will use the `sklearn.cluster.KMeans` class from scikit-learn.
-
-#### Gradient Boosting — Supervised
-
-- We will use XGBoost to capture complex and nonlinear relationships between audio features.
-- XGBoost can also capture interactions between features and includes regularization techniques that can help reduce overfitting.
-- We will use the `xgboost.XGBClassifier` class from the XGBoost library.
+- Gradient Boosting (supervised): We can use XGBoost to be able to capture complex relationships between the features that are non-linear while also assisting in feature selection regularization, and feature interactions. We will use the XGBoost library and the `xgboost.XGBCClassifier` class.
 
 ---
 
 ## 4. Potential Results and Discussion
 
-### Evaluation Metrics
+We will use the following metrics to evaluate our models:
 
-We will use quantitative metrics to evaluate the performance of our models.
+- RMSE and MAE (popularity prediction): the average error in popularity point. RMSE penalizes large errors more heavily, while MAE is easier to interpret.
 
-- **Accuracy:** Measures the overall percentage of songs whose genres are classified correctly.
+- R² (popularity prediction): the share of variation in popularity the model explains, compared with simply predicting the average.
 
-- **Precision:** Measures how often songs predicted to belong to a specific genre actually belong to that genre.
+- Silhouette score (clustering): how well separated the clusters are.
 
-- **Recall:** Measures how many songs from each actual genre are correctly identified.
-
-- **F1-Score:** Balances precision and recall and is useful when genre classes are not evenly represented.
-
-- **Silhouette Score:** Measures how well songs fit within their assigned clusters and how separated the clusters are from one another.
-
-- **Adjusted Rand Index (ARI) and Normalized Mutual Information (NMI):** Measure how closely the clusters produced by K-Means correspond with the actual genre labels [4].
+- Adjusted Rand Index and Normalized Mutual Information (clustering): how closely the clusters match the actual genre labels, from 0 (chance) to 1 (perfect match) [4]
 
 ### Project Goals
 
-- Outperform the Logistic Regression baseline using a more advanced supervised learning model.
-- Identify which audio features have the strongest relationship with song genre.
-- Determine whether songs naturally cluster into groups that resemble known genres.
+- Outperform a linear regression baseline using ensemble models.
+
+- Identify which audio features most influence a song’s popularity.
+
+- Determine whether songs naturally cluster into groups that resemble genres.
 
 ### Ethical Considerations
 
-Genre labels are not always objective and may reflect Spotify's existing categorization system. Some songs may belong to multiple genres, and broad genre labels may fail to accurately represent niche, hybrid, or non-Western music styles. Because of this, model predictions should not be treated as absolute definitions of a song's genre.
+A model trained on past hits could encourage recommending songs that sound like what is already popular, which disadvantages new and niche artists. Genre labels also reflect Spotify’s categories and may not fairly represent non-Western music.
 
 ### Sustainability Considerations
 
-We will compare model complexity and training time across different methods. If two models produce similar classification performance, we will favor the model that requires less computational power and training time.
+We will compare training time across models and favor lighter models when accuracy is similar.
 
 ### Practical Considerations
 
-Spotify has restricted access to some audio features through its API, so this project will rely on the existing static Kaggle dataset rather than collecting new data directly from Spotify.
+Spotify has restricted access to audio features in its API, so we will rely on the existing static dataset.
 
 ### Expected Results
 
-We expect more complex models such as XGBoost to outperform Logistic Regression because genre may depend on nonlinear combinations of several audio features. We also expect K-Means clustering to show partial alignment with actual genre labels. Genres with very different acoustic characteristics may form clearer clusters, while closely related subgenres may overlap. This would suggest that genre is influenced by measurable audio characteristics but is not determined by audio features alone [5], [6].
+We expect tree-based models to outperform linear regression because popularity likely depends on nonlinear combinations of features. However, audio features alone will likely explain only a modest share of popularity, since only prior work found that an artist’s existing fame strongly influences success [5]. For clustering, we expect only partial alignment with genres. Distinct genres like classical or metal should form clear clusters, while similar subgenres overlap, suggesting genre is partly cultural rather than purely acoustic. [6]
 
 ---
+
 
 ## 5. Gantt Chart
 
