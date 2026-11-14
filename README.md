@@ -48,15 +48,15 @@ We used scikit-learn’s LogisticRegression in a pipeline with StandardScaler, s
 ## 4. Results 
 
 ## Images
-<img width="984" height="584" alt="image" src="https://github.com/user-attachments/assets/0607cecc-28fb-47af-825a-6e5d0be3f660" />
+<img src="images/im1.png" alt="Number of tracks by genre family" width="700" />
 
 *Figure 1: Number of tracks in each genre family after cleaning (25,791 total). The classes are imbalanced: Electronic has 5,996 tracks while Jazz has only 969. This is why we report macro-F1 alongside accuracy.*
 
-<img width="881" height="784" alt="image" src="https://github.com/user-attachments/assets/4d2bd551-1437-4f1a-ac29-6976acb79038" />
+<img src="images/im2.png" alt="Logistic Regression confusion matrix" width="700" />
 
 *Figure 2: Logistic Regression confusion matrix, normalized by true genre (each row sums to 1). The diagonal is strong for Classical, Electronic, and Metal, but Pop is almost never predicted correctly (5% recall), and 52% of Hip-Hop tracks are misclassified as Electronic.*
 
-<img width="884" height="484" alt="image" src="https://github.com/user-attachments/assets/1b1fda76-50af-4d29-a370-40fc615660b5" />
+<img src="images/im3.png" alt="Test-set accuracy and macro-F1 for both models" width="700" />
 
 *Figure 3: Test-set accuracy and macro-F1 for both models on the same 5,159 tracks. XGBoost beats Logistic Regression by 12.6 points of accuracy (0.682 vs. 0.556) and 20 points of macro-F1 (0.660 vs. 0.458), showing that non-linear feature interactions matter for predicting genre.*
 
