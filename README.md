@@ -1,4 +1,4 @@
-# Machine Learning Project Proposal
+# CS4641 Midterm Checkpoint
 
 ## 1. Introduction and Background
 
@@ -32,55 +32,61 @@ The genre of a song can be hard to classify and is an important part of song rec
 
 ### Data Preprocessing
 
-- Remove duplicate tracks: If a `track_ID` occurs multiple times with different genre labels, we will only keep 1 instance.
+We started with the Spotify Tracks dataset: 114,000 rows that cover 114 genre tags. Exploring it showed that the same song appears once for every genre tag it carries. Only 89,741 track_ids are unique, and 16,299 tracks have multiple labels. 
 
-- Group together genres: There are 114 unique genres in the dataset. We will group similar genres into one overarching genre.
+To get a cleaner prediction target, we grouped 30 related genre tags into 8 broader families: Rock, Metal, Electronic, Hip-Hop, Pop, Classical, Jazz, and Country. We excluded all other tags, which left 30,000 rows. We then removed tracks that fell into more than one family and kept one row per track. That gave a final dataset of 25,791 tracks.
 
-- Standardize features (using `sklearn.preprocessing.StandardScaler`): Lots of the features are on different scales. We will want to normalize all features so they can be used for the ML models.
+We selected 12 numerical audio features, such as danceability, energy, loudness, and tempo. We split the data 80/20 with stratification, giving 20,632 training tracks and 5,159 test tracks, and reused that split for every model. We standardized features with StandardScaler, fit on the training data only so the test set stays unseen, and encoded the genre labels for XGBoost.
 
-### Potential ML Models
+### Implemented solution: supervised genre-family classification
 
-- Logistic Regression (supervised): We can use logistic regression to develop a baseline model to predict a song's genre from the features. It will provide a simple starting point for classification and can be used to compare with more complex models. We will use the scikit-learn library and the `sklearn.linear_model.LogisticRegression` class.
+Our solution predicts a song’s genre family from 12 Spotify audio features, using the preprocessed data described above (25,791 tracks, 8 families, an 80/20 stratified split). We implemented two supervised models on the same split and features, so they can be compared directly.
 
-- K-Means Clustering (unsupervised): We can use k-means clustering to group songs based on similarities in their audio features. We will use the scikit-learn library and the `sklearn.cluster.KMeans` class.
+### Logistic Regression and XGBoost
+We used scikit-learn’s LogisticRegression in a pipeline with StandardScaler, so features on different scales don’t dominate training. We chose it because it is fast and simple, and it gives a baseline that other models must beat. We used XGBClassifier with 200 trees and max depth 5 on the unscaled features. We chose it because genre likely depends on non-linear combinations of features, which boosted trees capture well. Prior work also found tree-based models strongest [1].
 
-- Gradient Boosting (supervised): We can use XGBoost to be able to capture complex relationships between the features that are non-linear while also assisting in feature selection regularization, and feature interactions. We will use the XGBoost library and the `xgboost.XGBCClassifier` class.
+## 4. Results 
 
----
+## Images
+<img width="984" height="584" alt="image" src="https://github.com/user-attachments/assets/0607cecc-28fb-47af-825a-6e5d0be3f660" />
 
-## 4. Potential Results and Discussion
+*Figure 1: Number of tracks in each genre family after cleaning (25,791 total). The classes are imbalanced: Electronic has 5,996 tracks while Jazz has only 969. This is why we report macro-F1 alongside accuracy.*
 
-### Evaluation Metrics
+<img width="881" height="784" alt="image" src="https://github.com/user-attachments/assets/4d2bd551-1437-4f1a-ac29-6976acb79038" />
 
-- Accuracy (classification): the share of songs assigned the correct genre.
-- Macro-F1 (classification): averages the F1 score across genres so each genre counts equally.
-- Confusion matrix (classification): shows which genres are most often confused with each other.
-- Silhouette score (clustering): how well separated the k-means clusters are.
-- Adjusted Rand Index and Normalized Mutual Information (clustering): how closely the clusters match the actual genre labels, from 0 (chance) to 1 (perfect match) [5].
+*Figure 2: Logistic Regression confusion matrix, normalized by true genre (each row sums to 1). The diagonal is strong for Classical, Electronic, and Metal, but Pop is almost never predicted correctly (5% recall), and 52% of Hip-Hop tracks are misclassified as Electronic.*
 
-### Project Goals
+<img width="884" height="484" alt="image" src="https://github.com/user-attachments/assets/1b1fda76-50af-4d29-a370-40fc615660b5" />
 
-- Outperform the logistic regression baseline using XGBoost.
-- Identify which audio features best distinguish genres.
-- Determine whether songs naturally cluster into groups that resemble genres.
+*Figure 3: Test-set accuracy and macro-F1 for both models on the same 5,159 tracks. XGBoost beats Logistic Regression by 12.6 points of accuracy (0.682 vs. 0.556) and 20 points of macro-F1 (0.660 vs. 0.458), showing that non-linear feature interactions matter for predicting genre.*
 
-### Ethical Considerations
+## Quantitiative Metrics: 
 
-Genre labels reflect Spotify’s categories and may not fairly represent non-Western music. Automated labels could also box artists into categories that affect how their music is recommended.
+All scores are on the held-out test set of 5,159 tracks across 8 genre families.
 
-### Sustainability Considerations
+| Model | Accuracy | Macro-F1 | Training Time |
+|---|---|---|---|
+| Logistic Regression | 0.556 | 0.458 | n/a |
+| **XGBoost** | **0.682** | **0.660** | 2.94 s |
 
-We will compare training time across models and favor lighter models when accuracy is similar.
+## Analysis of Models:
 
-### Practical Considerations
+Logistic Regression
 
-Spotify has restricted access to audio features in its API, so we will rely on the existing static dataset.
+Logistic regression reached 55.6% accuracy and 0.458 macro-F1. It does well on Classical, Electronic, and Metal (F1 about 0.72) but poorly on Pop (F1 0.08) and Jazz (F1 0.21). It draws straight-line boundaries, so it cannot capture the feature combinations that define genre, and it favors the large families. For example, 52% of Hip-Hop tracks are labeled Electronic. It works as a baseline, but a linear model is not enough.
 
-### Expected Results
+XGBoost
 
-We expect XGBoost to outperform logistic regression because genre likely depends on nonlinear combinations of audio features. This is supported by prior work, where tree-based models such as random forest achieved the highest accuracy (79.40%) for Spotify genre classification [1]. Accuracy should be much higher on grouped genre families than across all 114 original genres, since similar subgenres are hard to tell apart. For clustering, we expect only partial alignment with genres. Distinct genres like classical or metal should form clear clusters, while similar subgenres overlap, which is consistent with prior findings that genre labels are often noisy and inconsistent [4].
+XGBoost reached 68.2% accuracy and 0.660 macro-F1, which is 12.6 points of accuracy better than the baseline. It helps most on Jazz (F1 0.21 to 0.72) and Hip-Hop (0.30 to 0.57), because trees capture non-linear feature interactions. Pop (F1 0.38) and Rock (0.53) remain hardest, since they share sounds with other families. acousticness is the most important feature (about 22%). We have not tuned it yet, and our split is not grouped by artist, so scores may be slightly optimistic.
 
----
+## Next Steps:
+
+Add K-Means clustering to see if songs naturally group into genre-like clusters.
+Tune XGBoost and compare it with a random forest.
+Improve Pop, Jazz, and Hip-Hop, the families the models get wrong most often.
+Split by artist to check that our scores aren’t inflated.
+Add more genres beyond our current 8 families.
+
 
 ## 5. Gantt Chart
 
@@ -89,14 +95,12 @@ We expect XGBoost to outperform logistic regression because genre likely depends
 
 ## 6. Contribution Table
 
-| Name | Proposal Contributions |
+| Name | Project Contributions |
 |---|---|
-| Tucker Albaugh | Idea Proposition + Data Sourcing |
-| Andrew Wu | Introduction and Background + Gantt Chart |
-| Benjamin Carder | Problem Definition + Methods |
-| Meeton Kirkuki | Potential Results and Discussion |
-| Rida Rehan | Video Generation and Slides |
-
+| Tucker Albaugh | Report + Code Implementation |
+| Andrew Wu | Report and Code implementation |
+| Benjamin Carder | Data Cleaning + Modeling |
+| Meeton Kirkuki | Report and Data Cleaning |
 
 ## 7. References
 
